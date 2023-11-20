@@ -1,0 +1,151 @@
+// npx sass --watch css/style.css css/style.css 로 사용
+$green: #6aaa64;
+$yellow: #c9b458;
+$dark-gray: #787c7e;
+$light-gray: #d3d6da;
+$gray: #878a8c;
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+#app {
+  width: auto;
+  height: 100%;
+  //   height: 100%;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+
+  height: 65px;
+  color: #000;
+  border-bottom: 1px solid #d3d6da;
+
+  h1 {
+    font-family: "Alfa Slab One", serif;
+    font-weight: 200;
+    // flex-grow: 2;
+    // letter-spacing: 0.01em;
+    left: 0;
+    pointer-events: none;
+  }
+}
+
+.wordle-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 500px;
+  margin: 0 auto;
+  height: calc(100% - 65px);
+}
+
+.board-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.board {
+  width: 350px;
+  height: 420px;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  grid-gap: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+
+  .board-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5px;
+  }
+
+  // tile의 data-state=[empty, fill, absent, present, correct]
+  .tile {
+    font-size: 32px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: bold;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+  }
+
+  .tile[data-state="fill"] {
+    border: 2px solid $gray;
+    background-color: white;
+    color: black;
+  }
+
+  .tile[data-state="empty"] {
+    border: 2px solid $light-gray;
+  }
+
+  .tile[data-state="correct"] {
+    background: $green;
+    border: 2px solid $green;
+    color: white;
+  }
+
+  .tile[data-state="present"] {
+    background: $yellow;
+    border: 2px solid $yellow;
+    color: white;
+  }
+
+  .tile[data-state="absent"] {
+    background: $dark-gray;
+    border: 2px solid $dark-gray;
+    color: white;
+  }
+}
+
+.keyboard-wrapper {
+  height: 200px;
+  margin: 0 8px;
+  user-select: none;
+
+  .keyboard-row {
+    display: flex;
+    width: 100%;
+    margin: 0 auto 8px;
+    touch-action: manipulation;
+  }
+  .keyboard-key {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    border: 0;
+    padding: 0;
+    margin: 0 6px 0 0;
+    height: 58px;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    background-color: $light-gray;
+    color: black;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+  }
+  .keyboard-special-key {
+    flex: 1.5;
+    font-size: 12px;
+  }
+
+  .empty-space {
+    flex: 0.5;
+  }
+}
