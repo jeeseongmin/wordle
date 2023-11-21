@@ -67,7 +67,7 @@ header h1 {
   align-items: center;
   text-transform: uppercase;
 }
-.board .tile[data-state=fill] {
+.board .tile[data-state=tbd] {
   border: 2px solid #878a8c;
   background-color: white;
   color: black;
