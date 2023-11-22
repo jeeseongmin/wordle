@@ -13,6 +13,8 @@ function handleKeyup(event) {
     addLetter();
   } else if (event.which === 8 && tbdList.length > 0) {
     removeLetter();
+  } else if (event.which === 13 && tbdList.length < 5) {
+    openToast("Not enough letters");
   }
 
   function addLetter() {
@@ -25,4 +27,14 @@ function handleKeyup(event) {
     tbdTile.innerText = "";
     tbdTile.dataset.state = "empty";
   }
+}
+
+function openToast(message) {
+  const toastMessage = document.querySelector(".toast-message");
+
+  toastMessage.innerText = message;
+  toastMessage.classList.add("active");
+  setTimeout(function () {
+    toastMessage.classList.remove("active");
+  }, 1000);
 }

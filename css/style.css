@@ -131,4 +131,31 @@ header h1 {
 }
 .keyboard-wrapper .empty-space {
   flex: 0.5;
+}
+
+.toast-wrapper {
+  width: 100%;
+  position: absolute;
+  top: 50px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.toast-message {
+  width: auto;
+  padding: 12px 12px;
+  color: white;
+  background-color: black;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 5px;
+  transition: all 600ms;
+  opacity: 0%;
+}
+
+.toast-message.active {
+  opacity: 100%;
 }/*# sourceMappingURL=style.css.map */
