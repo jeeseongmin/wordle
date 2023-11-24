@@ -14,13 +14,18 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
     />
+
     <link rel="stylesheet" href="./css/normalize.css" />
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
     <div id="app">
       <header>
+        <div></div>
         <h1>Wordle</h1>
+        <span id="modal-open-button" class="icon material-symbols-outlined">
+          leaderboard
+        </span>
       </header>
       <div class="wordle-wrapper">
         <div class="board-wrapper">
@@ -115,7 +120,34 @@
       <div class="toast-wrapper">
         <div class="toast-message"></div>
       </div>
+      <div id="modal" class="hidden">
+        <div class="modal-wrapper">
+          <div class="modal-header">
+            <span
+              id="modal-close-button"
+              class="icon material-symbols-outlined"
+            >
+              close
+            </span>
+          </div>
+          <div class="modal-contents">
+            <div id="result-board">
+              <h1 id="result-text"></h1>
+            </div>
+            <div class="button-wrapper">
+              <button type="button" id="replay-button">
+                다시하기
+                <span class="material-symbols-outlined"> replay </span>
+              </button>
+              <button type="button" id="share-button">
+                공유하기
+                <span class="material-symbols-outlined"> share </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
-  <script src="js/index.js"></script>
+  <script type="module" src="js/index.js"></script>
 </html>
