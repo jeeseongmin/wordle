@@ -68,8 +68,9 @@ const handleKeyup = ({ event }) => {
   const tbdList = getTbdList();
 
   //  정답을 맞췄거나, 모든 타일 검사가 끝난 경우에는 더이상 입력 못하도록 방지
-  if (config.isCorrect || (emptyList.length === 0 && tbdList.length === 0))
+  if (config.isCorrect || (emptyList.length === 0 && tbdList.length === 0)) {
     return;
+  }
 
   // 문자 입력 (validation : 영문자 제한, 하나의 로우가 다 채워졌을 경우, 끝이 나지 않은 경우)
   if (65 <= event.which && event.which <= 90 && tbdList.length < 5) {
@@ -81,9 +82,13 @@ const handleKeyup = ({ event }) => {
     }
   }
   // 백스페이스 입력
-  if (event.which === 8) return removeLetter(tbdList);
+  if (event.which === 8) {
+    return removeLetter(tbdList);
+  }
   // 엔터 입력
-  if (event.which === 13) return handleEnterEvent(tbdList, emptyList);
+  if (event.which === 13) {
+    return handleEnterEvent(tbdList, emptyList);
+  }
 };
 
 /**
@@ -99,11 +104,13 @@ const checkAnswer = (tbdList) => {
     let answerLetter = config.answer[index];
 
     // 해당 위치에 있는 문자가 동일한 경우
-    if (currentLetter === answerLetter)
+    if (currentLetter === answerLetter) {
       return (tbdTile.dataset.state = "correct");
+    }
     // 해당 문자가 정답에 포함되어있는 경우
-    if (config.answer.includes(currentLetter))
+    if (config.answer.includes(currentLetter)) {
       return (tbdTile.dataset.state = "present");
+    }
     // 정답과 아무 연관이 없는 경우
     return (tbdTile.dataset.state = "absent");
   };
@@ -205,9 +212,13 @@ const handleClickKeyboard = (target) => {
   const tbdList = getTbdList();
   const emptyList = getEmptyList();
 
-  if (letter === "backspace") removeLetter(tbdList);
-  else if (letter === "enter") handleEnterEvent(tbdList, emptyList);
-  else addLetter(tbdList, letter);
+  if (letter === "backspace") {
+    removeLetter(tbdList);
+  } else if (letter === "enter") {
+    handleEnterEvent(tbdList, emptyList);
+  } else {
+    addLetter(tbdList, letter);
+  }
 
   // 버튼 포커스 해제
   target.blur();
@@ -218,9 +229,13 @@ const handleClickKeyboard = (target) => {
  */
 const handleEnterEvent = (tbdList, emptyList) => {
   // tbd 타일 갯수가 5개일 경우 한줄이 채워진 것이므로 정답 체크
-  if (tbdList.length === 5) return checkAnswer(tbdList);
+  if (tbdList.length === 5) {
+    return checkAnswer(tbdList);
+  }
   // 아닌 경우 부족하다는 에러 토스트
-  if (emptyList.length > 0) return openToast("Not enough letters");
+  if (emptyList.length > 0) {
+    return openToast("Not enough letters");
+  }
 };
 
 /**
@@ -252,8 +267,11 @@ const toggleModal = (text, isOpen) => {
       answerText.innerText = "";
     }
 
-    if (isOpen) modal.classList.remove("hidden");
-    else modal.classList.add("hidden");
+    if (isOpen) {
+      modal.classList.remove("hidden");
+    } else {
+      modal.classList.add("hidden");
+    }
   }, 500);
 };
 
@@ -321,9 +339,13 @@ export const eventsLoad = () => {
   window.addEventListener("keyup", (event) => handleKeyup({ event }));
   window.addEventListener("click", (event) => {
     // 모달 오픈 버튼
-    if (event.target.id === "modal-open-button") return toggleModal("", true);
+    if (event.target.id === "modal-open-button") {
+      return toggleModal("", true);
+    }
     // 모달 닫기 버튼
-    if (event.target.id === "modal-close-button") return toggleModal("", false);
+    if (event.target.id === "modal-close-button") {
+      return toggleModal("", false);
+    }
     // 다시하기 버튼
     if (
       event.target.id === "replay-button" ||
@@ -337,8 +359,9 @@ export const eventsLoad = () => {
     if (
       event.target.id === "share-button" ||
       event.target.parentElement.id === "share-button"
-    )
+    ) {
       return shareResult();
+    }
     // 키보드 UI 클릭
     if (
       event.target.classList[0] === "keyboard-key" ||
