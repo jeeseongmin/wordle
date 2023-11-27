@@ -292,7 +292,7 @@ const shareResult = () => {
   const copyToClipBoard = (text) => {
     window.navigator.clipboard
       .writeText(text)
-      .then(() => console.log(`${text}`))
+      .then(() => openToast("Copied!"))
       .catch((e) => console.log(e));
   };
 
