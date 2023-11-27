@@ -136,7 +136,7 @@ const checkAnswer = (tbdList) => {
     }
   };
 
-  const word = [...tbdList].map((item) => item.innerText).join("");
+  const word = tbdList.map((item) => item.innerText).join("");
 
   // 단어 리스트에 포함되어있지 않으면 에러 토스트
   if (!validWords.includes(word.toLowerCase())) {
