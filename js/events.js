@@ -17,9 +17,9 @@ const init = () => {
    */
   const resetKeyboard = () => {
     const keyList = document.querySelectorAll(".keyboard-key");
-    for (let i = 0; i < keyList.length; i++) {
-      keyList[i].dataset.state = "empty";
-    }
+    [...keyList].map((item, index) => {
+      keyList[index].dataset.state = "empty";
+    });
   };
 
   /**
@@ -27,10 +27,10 @@ const init = () => {
    */
   const resetTiles = () => {
     const tileList = document.querySelectorAll(".tile");
-    for (let i = 0; i < tileList.length; i++) {
-      tileList[i].dataset.state = "empty";
-      tileList[i].innerText = "";
-    }
+    [...tileList].map((item, index) => {
+      tileList[index].dataset.state = "empty";
+      tileList[index].innerText = "";
+    });
   };
 
   /**
@@ -146,11 +146,12 @@ const checkAnswer = (tbdList) => {
   // 포함되어있다면 채점
   else {
     let rowResult = [];
-    for (let i = 0; i < tbdList.length; i++) {
-      let tileState = compareLetter(i);
-      checkKeyboard(i);
+    [...tbdList].map((item, index) => {
+      let tileState = compareLetter(index);
+      checkKeyboard(index);
       rowResult.push(tileState);
-    }
+    });
+
     config.setNumber++;
     config.result.push(rowResult);
 
@@ -303,11 +304,11 @@ const shareResult = () => {
     absent: "⬛",
   };
 
-  for (let i = 0; i < config.result.length; i++) {
-    let row = config.result[i];
+  for (let resultNum = 0; resultNum < config.result.length; resultNum++) {
+    let row = config.result[resultNum];
 
-    for (let j = 0; j < row.length; j++) {
-      resultText += stateStyle[row[i]];
+    for (let rowNum = 0; rowNum < row.length; rowNum++) {
+      resultText += stateStyle[row[rowNum]];
     }
 
     resultText += "\n";
