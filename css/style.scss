@@ -1,9 +1,12 @@
 // npx sass --watch css/style.css css/style.css 로 사용
 $green: #6aaa64;
+$dark-green: #58a351;
 $yellow: #c9b458;
 $dark-gray: #787c7e;
 $light-gray: #d3d6da;
 $gray: #878a8c;
+$black: #000;
+$white: #fff;
 
 html,
 body {
@@ -29,8 +32,8 @@ header {
   align-items: center;
   flex-wrap: nowrap;
   height: 65px;
-  color: #000;
-  border-bottom: 1px solid #d3d6da;
+  color: $black;
+  border-bottom: 1px solid $light-gray;
 
   h1 {
     padding: 0;
@@ -88,8 +91,8 @@ header {
 
   .tile[data-state="tbd"] {
     border: 2px solid $gray;
-    background-color: white;
-    color: black;
+    background-color: $white;
+    color: $black;
   }
 
   .tile[data-state="empty"] {
@@ -99,19 +102,19 @@ header {
   .tile[data-state="correct"] {
     background: $green;
     border: 2px solid $green;
-    color: white;
+    color: $white;
   }
 
   .tile[data-state="present"] {
     background: $yellow;
     border: 2px solid $yellow;
-    color: white;
+    color: $white;
   }
 
   .tile[data-state="absent"] {
     background: $dark-gray;
     border: 2px solid $dark-gray;
-    color: white;
+    color: $white;
   }
 }
 
@@ -140,7 +143,7 @@ header {
     cursor: pointer;
     user-select: none;
     background-color: $light-gray;
-    color: black;
+    color: $black;
     flex: 1;
     display: flex;
     justify-content: center;
@@ -151,8 +154,8 @@ header {
 
   .keyboard-key[data-state="tbd"] {
     border: 2px solid $gray;
-    background-color: white;
-    color: black;
+    background-color: $white;
+    color: $black;
   }
 
   .keyboard-key[data-state="empty"] {
@@ -162,19 +165,19 @@ header {
   .keyboard-key[data-state="correct"] {
     background: $green;
     border: 2px solid $green;
-    color: white;
+    color: $white;
   }
 
   .keyboard-key[data-state="present"] {
     background: $yellow;
     border: 2px solid $yellow;
-    color: white;
+    color: $white;
   }
 
   .keyboard-key[data-state="absent"] {
     background: $dark-gray;
     border: 2px solid $dark-gray;
-    color: white;
+    color: $white;
   }
 
   .keyboard-special-key {
@@ -201,8 +204,8 @@ header {
 .toast-message {
   width: auto;
   padding: 12px 12px;
-  color: white;
-  background-color: black;
+  color: $white;
+  background-color: $black;
   font-weight: bold;
   font-size: 14px;
   border-radius: 5px;
@@ -220,7 +223,7 @@ header {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgb(white, 0.95);
+  background-color: rgb($white, 0.95);
   overflow: hidden;
   transition: all 200ms;
 
@@ -272,8 +275,8 @@ header {
       font-size: 14px;
       line-height: 16px;
       vertical-align: middle;
-      color: white;
-      background-color: rgb(#58a351, 1);
+      color: $white;
+      background-color: rgb($dark-green, 1);
       padding: 12px;
       margin: 0;
       border: none;
