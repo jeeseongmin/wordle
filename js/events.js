@@ -74,15 +74,16 @@ const handleKeyup = ({ event }) => {
   // 문자 입력 (validation : 영문자 제한, 하나의 로우가 다 채워졌을 경우, 끝이 나지 않은 경우)
   if (65 <= event.which && event.which <= 90 && tbdList.length < 5) {
     if (koreanRegex.test(event.key)) {
-      openToast("Please type it in English");
-    } else if (englishRegex.test(event.key)) {
-      addLetter(tbdList, event.key);
+      return openToast("Please type it in English");
+    }
+    if (englishRegex.test(event.key)) {
+      return addLetter(tbdList, event.key);
     }
   }
   // 백스페이스 입력
-  else if (event.which === 8) removeLetter(tbdList);
+  if (event.which === 8) return removeLetter(tbdList);
   // 엔터 입력
-  else if (event.which === 13) handleEnterEvent(tbdList, emptyList);
+  if (event.which === 13) return handleEnterEvent(tbdList, emptyList);
 };
 
 /**
@@ -97,13 +98,14 @@ const checkAnswer = (tbdList) => {
     let currentLetter = tbdTile.innerText;
     let answerLetter = config.answer[index];
 
-    if (currentLetter === answerLetter) {
-      tbdTile.dataset.state = "correct";
-    } else if (config.answer.includes(currentLetter))
-      tbdTile.dataset.state = "present";
-    else tbdTile.dataset.state = "absent";
-
-    return tbdTile.dataset.state;
+    // 해당 위치에 있는 문자가 동일한 경우
+    if (currentLetter === answerLetter)
+      return (tbdTile.dataset.state = "correct");
+    // 해당 문자가 정답에 포함되어있는 경우
+    if (config.answer.includes(currentLetter))
+      return (tbdTile.dataset.state = "present");
+    // 정답과 아무 연관이 없는 경우
+    return (tbdTile.dataset.state = "absent");
   };
 
   /**
@@ -148,13 +150,13 @@ const checkAnswer = (tbdList) => {
     if (rowResult.filter((item) => item === "correct").length === 5) {
       config.isCorrect = true;
       config.isEnd = true;
-      toggleModal("Game Clear!", true);
+      return toggleModal("Game Clear!", true);
     }
     // 더이상 타일을 입력하지 못하는 경우
-    else if (getEmptyList().length === 0 && getTbdList().length === 0) {
+    if (getEmptyList().length === 0 && getTbdList().length === 0) {
       config.isEnd = true;
       openToast(config.answer);
-      toggleModal(`Game Fail`, true);
+      return toggleModal(`Game Fail`, true);
     }
   }
 };
@@ -216,9 +218,9 @@ const handleClickKeyboard = (target) => {
  */
 const handleEnterEvent = (tbdList, emptyList) => {
   // tbd 타일 갯수가 5개일 경우 한줄이 채워진 것이므로 정답 체크
-  if (tbdList.length === 5) checkAnswer(tbdList);
+  if (tbdList.length === 5) return checkAnswer(tbdList);
   // 아닌 경우 부족하다는 에러 토스트
-  else if (emptyList.length > 0) openToast("Not enough letters");
+  if (emptyList.length > 0) return openToast("Not enough letters");
 };
 
 /**
@@ -249,6 +251,7 @@ const toggleModal = (text, isOpen) => {
     } else {
       answerText.innerText = "";
     }
+
     if (isOpen) modal.classList.remove("hidden");
     else modal.classList.add("hidden");
   }, 500);
@@ -291,14 +294,17 @@ const shareResult = () => {
   };
 
   let resultText = `Wordle ${getToday()} ${config.setNumber}/6\n\n`;
+  const stateStyle = {
+    correct: "🟩",
+    present: "🟨",
+    absent: "⬛",
+  };
 
   for (let i = 0; i < config.result.length; i++) {
     let row = config.result[i];
 
     for (let j = 0; j < row.length; j++) {
-      if (row[j] === "correct") resultText += "🟩";
-      else if (row[j] === "present") resultText += "🟨";
-      else if (row[j] === "absent") resultText += "⬛";
+      resultText += stateStyle[row[i]];
     }
 
     resultText += "\n";
@@ -315,30 +321,30 @@ export const eventsLoad = () => {
   window.addEventListener("keyup", (event) => handleKeyup({ event }));
   window.addEventListener("click", (event) => {
     // 모달 오픈 버튼
-    if (event.target.id === "modal-open-button") toggleModal("", true);
+    if (event.target.id === "modal-open-button") return toggleModal("", true);
     // 모달 닫기 버튼
-    else if (event.target.id === "modal-close-button") toggleModal("", false);
+    if (event.target.id === "modal-close-button") return toggleModal("", false);
     // 다시하기 버튼
-    else if (
+    if (
       event.target.id === "replay-button" ||
       event.target.parentElement.id === "replay-button"
     ) {
       init();
       toggleModal("", false);
-      openToast("New Game");
+      return openToast("New Game");
     }
     // 공유 버튼 클릭
-    else if (
+    if (
       event.target.id === "share-button" ||
       event.target.parentElement.id === "share-button"
     )
-      shareResult();
+      return shareResult();
     // 키보드 UI 클릭
-    else if (
+    if (
       event.target.classList[0] === "keyboard-key" ||
       event.target.parentElement.classList[0] === "keyboard-key"
     ) {
-      handleClickKeyboard(
+      return handleClickKeyboard(
         event.target.classList[0] === "keyboard-key"
           ? event.target
           : event.target.parentElement
