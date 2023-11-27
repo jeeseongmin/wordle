@@ -64,8 +64,8 @@ const handleKeyup = ({ event }) => {
   const englishRegex = /^[a-zA-Z]*$/;
   const koreanRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
 
-  const emptyList = getEmptyList();
-  const tbdList = getTbdList();
+  const emptyList = getTileList("empty");
+  const tbdList = getTileList("tbd");
 
   //  정답을 맞췄거나, 모든 타일 검사가 끝난 경우에는 더이상 입력 못하도록 방지
   if (config.isCorrect || (emptyList.length === 0 && tbdList.length === 0)) {
@@ -136,7 +136,8 @@ const checkAnswer = (tbdList) => {
     }
   };
 
-  const word = tbdList.map((item) => item.innerText).join("");
+  // NodeList에 map을 사용하기 위해 spread Operator 사용
+  const word = [...tbdList].map((item) => item.innerText).join("");
 
   // 단어 리스트에 포함되어있지 않으면 에러 토스트
   if (!validWords.includes(word.toLowerCase())) {
@@ -160,7 +161,7 @@ const checkAnswer = (tbdList) => {
       return toggleModal("Game Clear!", true);
     }
     // 더이상 타일을 입력하지 못하는 경우
-    if (getEmptyList().length === 0 && getTbdList().length === 0) {
+    if (getTileList("empty").length === 0 && getTileList("tbd").length === 0) {
       config.isEnd = true;
       openToast(config.answer);
       return toggleModal(`Game Fail`, true);
@@ -190,18 +191,8 @@ const removeLetter = (tbdList) => {
   }
 };
 
-/**
- * 해당 시점에서 empty 상태의 타일 리스트 가져오기
- */
-const getEmptyList = () => {
-  return document.querySelectorAll(".tile[data-state='empty']");
-};
-
-/**
- * 해당 시점에서 tbd 상태의 타일 리스트 가져오기
- */
-const getTbdList = () => {
-  return document.querySelectorAll(".tile[data-state='tbd']");
+const getTileList = (state) => {
+  return document.querySelectorAll(`.tile[data-state=${state}]`);
 };
 
 /**
@@ -209,8 +200,8 @@ const getTbdList = () => {
  */
 const handleClickKeyboard = (target) => {
   const letter = target.dataset.label;
-  const tbdList = getTbdList();
-  const emptyList = getEmptyList();
+  const tbdList = getTileList("tbd");
+  const emptyList = getTileList("empty");
 
   if (letter === "backspace") {
     removeLetter(tbdList);
