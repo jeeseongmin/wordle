@@ -61,32 +61,39 @@ const init = () => {
  * 키 입력 이벤트
  */
 const handleKeyup = ({ event }) => {
-  const englishRegex = /^[a-zA-Z]*$/;
-  const koreanRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+  const englishRegex = /^[a-zA-Z]{1}$/;
+  const koreanRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{1}/;
 
   const emptyList = getTileList("empty");
   const tbdList = getTileList("tbd");
 
-  //  정답을 맞췄거나, 모든 타일 검사가 끝난 경우에는 더이상 입력 못하도록 방지
-  if (config.isCorrect || (emptyList.length === 0 && tbdList.length === 0)) {
+  // 정답을 맞췄거나, 모든 타일 검사가 끝난 경우에는 더이상 입력 못하도록 방지
+  const isDisabled =
+    config.isCorrect || (emptyList.length === 0 && tbdList.length === 0);
+  // 백스페이스 여부
+  const isBackspace = event.which === 8;
+  // 엔터 여부
+  const isEnter = event.which === 13;
+  // 한글 입력 여부
+  const isKorean = koreanRegex.test(event.key);
+  // 영어 입력 여부
+  const isEnglish = englishRegex.test(event.key);
+
+  if (isDisabled) {
     return;
   }
 
-  // 문자 입력 (validation : 영문자 제한, 하나의 로우가 다 채워졌을 경우, 끝이 나지 않은 경우)
-  if (65 <= event.which && event.which <= 90 && tbdList.length < 5) {
-    if (koreanRegex.test(event.key)) {
-      return openToast("Please type it in English");
-    }
-    if (englishRegex.test(event.key)) {
-      return addLetter(tbdList, event.key);
-    }
+  if (isKorean) {
+    return openToast("Please type it in English");
   }
-  // 백스페이스 입력
-  if (event.which === 8) {
+
+  if (isEnglish) {
+    return addLetter(tbdList, event.key);
+  }
+  if (isBackspace) {
     return removeLetter(tbdList);
   }
-  // 엔터 입력
-  if (event.which === 13) {
+  if (isEnter) {
     return handleEnterEvent(tbdList, emptyList);
   }
 };
@@ -122,16 +129,17 @@ const checkAnswer = (tbdList) => {
     const tile = tbdList[index];
     const letter = tile.innerText;
     const key = document.querySelector(`[data-label='${letter}']`);
+
+    const needToChange =
+      (key.dataset.state === "present" && tile.dataset.state === "correct") ||
+      key.dataset.state === "empty" ||
+      key.dataset.state === "absent";
     /**
      * 키보드 내 키 상태를 타일과 동일하게 세팅하는 경우
      * 1. key.dataset.state가 present이면서 tile.dataset.state이 correct인 경우
      * 2. key.dataset.state가 empty이거나 absent인 경우
      */
-    if (
-      (key.dataset.state === "present" && tile.dataset.state === "correct") ||
-      key.dataset.state === "empty" ||
-      key.dataset.state === "absent"
-    ) {
+    if (needToChange) {
       key.dataset.state = tile.dataset.state;
     }
   };
@@ -155,14 +163,19 @@ const checkAnswer = (tbdList) => {
     config.setNumber++;
     config.result.push(rowResult);
 
+    const isAnswer =
+      rowResult.filter((item) => item === "correct").length === 5;
+    const isDisabled =
+      getTileList("empty").length === 0 && getTileList("tbd").length === 0;
+
     // 정답인 경우
-    if (rowResult.filter((item) => item === "correct").length === 5) {
+    if (isAnswer) {
       config.isCorrect = true;
       config.isEnd = true;
       return toggleModal("Game Clear!", true);
     }
     // 더이상 타일을 입력하지 못하는 경우
-    if (getTileList("empty").length === 0 && getTileList("tbd").length === 0) {
+    if (isDisabled) {
       config.isEnd = true;
       openToast(config.answer);
       return toggleModal(`Game Fail`, true);
@@ -174,7 +187,8 @@ const checkAnswer = (tbdList) => {
  * 빈 타일에 문자 채우기
  */
 const addLetter = (tbdList, letter) => {
-  if (!config.isEnd && tbdList.length < 5) {
+  const isPossible = !config.isEnd && tbdList.length < 5;
+  if (isPossible) {
     const emptyTile = document.querySelector(".tile[data-state='empty']");
     emptyTile.innerText = letter;
     emptyTile.dataset.state = "tbd";
@@ -185,7 +199,8 @@ const addLetter = (tbdList, letter) => {
  * tbd 타일에서 문자 지우기
  */
 const removeLetter = (tbdList) => {
-  if (!config.isEnd && tbdList.length > 0) {
+  const isPossible = !config.isEnd && tbdList.length > 0;
+  if (isPossible) {
     const tbdTile = tbdList[tbdList.length - 1];
     tbdTile.innerText = "";
     tbdTile.dataset.state = "empty";
@@ -324,35 +339,37 @@ export const eventsLoad = () => {
 
   window.addEventListener("keyup", (event) => handleKeyup({ event }));
   window.addEventListener("click", (event) => {
-    // 모달 오픈 버튼
-    if (event.target.id === "modal-open-button") {
+    const isModalOpenButton = event.target.id === "modal-open-button";
+    const isModalCloseButton = event.target.id === "modal-close-button";
+    const isReplayButton =
+      event.target.id === "replay-button" ||
+      event.target.parentElement.id === "replay-button";
+    const isShareButton =
+      event.target.id === "share-button" ||
+      event.target.parentElement.id === "share-button";
+    const isKeyboardUI =
+      event.target.classList[0] === "keyboard-key" ||
+      event.target.parentElement.classList[0] === "keyboard-key";
+
+    if (isModalOpenButton) {
       return toggleModal("", true);
     }
-    // 모달 닫기 버튼
-    if (event.target.id === "modal-close-button") {
+
+    if (isModalCloseButton) {
       return toggleModal("", false);
     }
-    // 다시하기 버튼
-    if (
-      event.target.id === "replay-button" ||
-      event.target.parentElement.id === "replay-button"
-    ) {
+
+    if (isReplayButton) {
       init();
       toggleModal("", false);
       return openToast("New Game");
     }
-    // 공유 버튼 클릭
-    if (
-      event.target.id === "share-button" ||
-      event.target.parentElement.id === "share-button"
-    ) {
+
+    if (isShareButton) {
       return shareResult();
     }
-    // 키보드 UI 클릭
-    if (
-      event.target.classList[0] === "keyboard-key" ||
-      event.target.parentElement.classList[0] === "keyboard-key"
-    ) {
+
+    if (isKeyboardUI) {
       return handleClickKeyboard(
         event.target.classList[0] === "keyboard-key"
           ? event.target
