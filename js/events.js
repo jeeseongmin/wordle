@@ -233,37 +233,31 @@ const handleEnterEvent = (tbdList, emptyList) => {
  * 토스트 팝업 오픈 함수
  */
 const openToast = (message) => {
+  const closeToast = () => {
+    toastMessage.classList.remove("active");
+  };
   const toastMessage = document.querySelector(".toast-message");
 
   toastMessage.innerText = message;
   toastMessage.classList.add("active");
-  setTimeout(function () {
-    toastMessage.classList.remove("active");
-  }, 1000);
+  setTimeout(closeToast, 1000);
 };
 
 /**
  * 모달 토글 함수
  */
 const toggleModal = (text, isOpen) => {
-  setTimeout(function () {
+  const toggleAction = () => {
     const modal = document.getElementById("modal");
     const resultText = document.getElementById("result-text");
     const answerText = document.getElementById("answer-text");
     resultText.innerText = text;
 
-    if (config.isEnd) {
-      answerText.innerText = `answer : ${config.answer}`;
-    } else {
-      answerText.innerText = "";
-    }
+    answerText.innerText = config.isEnd ? `answer : ${config.answer}` : ``;
+    isOpen ? modal.classList.remove("hidden") : modal.classList.add("hidden");
+  };
 
-    if (isOpen) {
-      modal.classList.remove("hidden");
-    } else {
-      modal.classList.add("hidden");
-    }
-  }, 500);
+  setTimeout(toggleAction, 500);
 };
 
 /**
