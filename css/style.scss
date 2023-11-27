@@ -150,33 +150,34 @@ header {
     align-items: center;
     text-transform: uppercase;
     user-select: none;
+    border: 2px solid;
   }
 
   .keyboard-key[data-state="tbd"] {
-    border: 2px solid $gray;
+    border-color: $gray;
     background-color: $white;
     color: $black;
   }
 
   .keyboard-key[data-state="empty"] {
-    border: 2px solid $light-gray;
+    border-color: $light-gray;
   }
 
   .keyboard-key[data-state="correct"] {
     background: $green;
-    border: 2px solid $green;
+    border-color: $green;
     color: $white;
   }
 
   .keyboard-key[data-state="present"] {
     background: $yellow;
-    border: 2px solid $yellow;
+    border-color: $yellow;
     color: $white;
   }
 
   .keyboard-key[data-state="absent"] {
     background: $dark-gray;
-    border: 2px solid $dark-gray;
+    border-color: $dark-gray;
     color: $white;
   }
 
