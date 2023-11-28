@@ -1,9 +1,4 @@
-const Button = ({ id, name, iconName }) => `
-    <button type="button" id="${id}">
-        ${name}
-        <span class="material-symbols-outlined"> ${iconName} </span>
-    </button>
-`;
+import { Button } from "../Common/Button.js";
 
 export const ModalTemplates = () => {
   return `      
