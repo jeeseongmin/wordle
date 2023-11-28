@@ -1,9 +1,12 @@
 // npx sass --watch css/style.css css/style.css 로 사용
 $green: #6aaa64;
+$dark-green: #58a351;
 $yellow: #c9b458;
 $dark-gray: #787c7e;
 $light-gray: #d3d6da;
 $gray: #878a8c;
+$black: #000;
+$white: #fff;
 
 html,
 body {
@@ -12,30 +15,36 @@ body {
   padding: 0;
   margin: 0;
 }
+
 #app {
   width: auto;
   height: 100%;
-  //   height: 100%;
+}
+
+.icon {
+  font-size: 30px;
+  cursor: pointer;
 }
 
 header {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 50px 1fr 50px;
   align-items: center;
   flex-wrap: nowrap;
-
   height: 65px;
-  color: #000;
-  border-bottom: 1px solid #d3d6da;
+  color: $black;
+  border-bottom: 1px solid $light-gray;
 
   h1 {
+    padding: 0;
+    margin: 0;
     font-family: "Alfa Slab One", serif;
     font-weight: 200;
-    // flex-grow: 2;
-    // letter-spacing: 0.01em;
-    left: 0;
     pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 }
 
@@ -70,7 +79,6 @@ header {
     grid-gap: 5px;
   }
 
-  // tile의 data-state=[empty, fill, absent, present, correct]
   .tile {
     font-size: 32px;
     font-family: "Bricolage Grotesque", sans-serif;
@@ -81,10 +89,10 @@ header {
     text-transform: uppercase;
   }
 
-  .tile[data-state="fill"] {
+  .tile[data-state="tbd"] {
     border: 2px solid $gray;
-    background-color: white;
-    color: black;
+    background-color: $white;
+    color: $black;
   }
 
   .tile[data-state="empty"] {
@@ -94,19 +102,19 @@ header {
   .tile[data-state="correct"] {
     background: $green;
     border: 2px solid $green;
-    color: white;
+    color: $white;
   }
 
   .tile[data-state="present"] {
     background: $yellow;
     border: 2px solid $yellow;
-    color: white;
+    color: $white;
   }
 
   .tile[data-state="absent"] {
     background: $dark-gray;
     border: 2px solid $dark-gray;
-    color: white;
+    color: $white;
   }
 }
 
@@ -121,6 +129,7 @@ header {
     margin: 0 auto 8px;
     touch-action: manipulation;
   }
+
   .keyboard-key {
     font-family: "Bricolage Grotesque", sans-serif;
     font-size: 24px;
@@ -128,18 +137,50 @@ header {
     border: 0;
     padding: 0;
     margin: 0 6px 0 0;
+    outline: none;
     height: 58px;
     border-radius: 4px;
     cursor: pointer;
     user-select: none;
     background-color: $light-gray;
-    color: black;
+    color: $black;
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     text-transform: uppercase;
+    user-select: none;
+    border: 2px solid;
   }
+
+  .keyboard-key[data-state="tbd"] {
+    border-color: $gray;
+    background-color: $white;
+    color: $black;
+  }
+
+  .keyboard-key[data-state="empty"] {
+    border-color: $light-gray;
+  }
+
+  .keyboard-key[data-state="correct"] {
+    background: $green;
+    border-color: $green;
+    color: $white;
+  }
+
+  .keyboard-key[data-state="present"] {
+    background: $yellow;
+    border-color: $yellow;
+    color: $white;
+  }
+
+  .keyboard-key[data-state="absent"] {
+    background: $dark-gray;
+    border-color: $dark-gray;
+    color: $white;
+  }
+
   .keyboard-special-key {
     flex: 1.5;
     font-size: 12px;
@@ -147,5 +188,111 @@ header {
 
   .empty-space {
     flex: 0.5;
+  }
+}
+
+.toast-wrapper {
+  width: 100%;
+  position: absolute;
+  top: 50px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.toast-message {
+  width: auto;
+  padding: 12px 12px;
+  color: $white;
+  background-color: $black;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 5px;
+  transition: all 600ms;
+  opacity: 0%;
+}
+
+.toast-message.active {
+  opacity: 100%;
+}
+
+#modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb($white, 0.95);
+  overflow: hidden;
+  transition: all 200ms;
+
+  &.hidden {
+    transform: translate3d(0, -100%, 0);
+    opacity: 0;
+  }
+}
+
+.modal-wrapper {
+  width: auto;
+  height: 100%;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 20% 1fr 20%;
+
+  .modal-header {
+    display: flex;
+    padding: 75px 105px 0px 0px;
+    justify-content: flex-end;
+  }
+
+  .modal-contents {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    #result-board {
+      width: 343px;
+      text-align: center;
+    }
+
+    .button-wrapper {
+      width: 343px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+    }
+
+    button {
+      width: 200px;
+      height: 44px;
+      border-radius: 104px;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 16px;
+      vertical-align: middle;
+      color: $white;
+      background-color: rgb($dark-green, 1);
+      padding: 12px;
+      margin: 0;
+      border: none;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding-left: 20px;
+      cursor: pointer;
+
+      span {
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
   }
 }
